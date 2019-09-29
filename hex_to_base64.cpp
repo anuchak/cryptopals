@@ -1,78 +1,67 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-void ins(int n, vector <int> &b)
+string ret(string s)
 {
-  int a[4];
-  for(int i=0;i<4;i++)
+  string re;
+  for(int i = 0; i < s.size(); i++)
   {
-     a[3-i] = (n%2);
-     n = n/2;
+    int t = (s[i] <= '9') ? (s[i]-'0') : (s[i] -'a' + 10);
+    string ans;    
+    int c = 0;
+    //cout << t << "\n";
+    while(t)
+    {
+      ans.push_back(t % 2 + 48);
+      t /= 2;
+      c++;
+    }
+    while(c < 4)
+    {
+      ans.push_back('0');
+      c++;
+    }
+    reverse(ans.begin(), ans.end());
+    //cout << ans << "\n";
+    re.append(ans);
   }
-  for(int i=0;i<4;i++)
-  {
-    b.push_back(a[i]);
-  }
+  //cout << re << "\n";
+  return re;
 }
 
-int main()
+int main() 
 {
-  string a;
-  cin >> a;
-  vector <int> b;
-  for(int i = 0; i < a.size(); i++)
+  string s = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
+
+  string bin = ret(s);
+  //cout << bin.size() << "\n";
+  int rem = 6 - bin.size() % 6;
+  if(rem != 6)
+  while(rem--)
+  bin.push_back('0');
+  //cout << bin << "\n";
+  for(int i = 0; i < bin.size(); i+=6)
   {
-     int n = 0;
-     if(a[i] >= 'a' && a[i] <= 'f')
-     n=a[i]-'a'+10;
-     else
-     n=a[i]-'0';
-     ins(n,b);
-  }
-  if(b.size()%3)
-  {
-    int k = b.size()%3;
-    b.push_back(0);
-    b.push_back(0);
-    if(k == 2) {
-    b.push_back(0);
-    b.push_back(0);
-    }
-  }
-  
-  //for(int i = 0; i < b.size(); i++)
-  //cout<<b[i];
-  //cout<<endl;
-  
-  for(int i = 0; i < b.size(); i+=6)
-  {
-    int num=0;
-    int p = 1;
-    for(int j = i+5; i <= j; j--)
+    int val = 0, ind = 5;
+    while(ind > -1)
     {
-      num = num + p*b[j];
-      p*=2;
+      val += (bin[i+ind] - '0') * pow(2, 5-ind);
+      ind--;
     }
-    if(num < 26)
+    //cout << val << " ";
+    if(val < 26)
     {
-      int t = 65+num;
-      cout<<(char)t;
+      cout << (char)(val + 65);
     }
-    else if(num > 25 && num < 52)
+    else if(val < 52)
     {
-      int t = 71+num;
-      cout<<(char)t;
+      cout << (char)(val + 71);
     }
-    else if(num > 51 && num < 62)
-    {
-      int t = num-4;
-      cout<<(char)t;
-    }
-    else if(num==62)
-    cout<<"+";
     else
-    cout<<"/";
+    {
+      cout << (char)(val - 4);
+    }
+    //cout << "\n";
   }
-  cout<<endl;
-  return 0;
+  //cout << "\n";
 }
